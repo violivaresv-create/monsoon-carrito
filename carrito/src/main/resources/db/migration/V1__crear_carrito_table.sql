@@ -1,0 +1,4 @@
+CREATE TABLE carrito (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    total DECIMAL(10, 2) NOT NULL
+);

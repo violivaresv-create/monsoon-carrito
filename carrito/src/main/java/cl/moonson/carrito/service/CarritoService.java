@@ -1,5 +1,7 @@
 package cl.moonson.carrito.service;
 
+import java.math.BigDecimal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -19,7 +21,13 @@ public class CarritoService {
     @Autowired
     private WebClient webClient;
 
-    public void agregarJuegoAlCarrito(Carrito carrito, Long juegoId) {
+    public Carrito crearCarrito() {
+        Carrito carrito = new Carrito();
+        carrito.setTotal(BigDecimal.ZERO);
+    return carritoRepository.save(carrito);
+    }
+
+    public void agregarJuegoAlCarrito(Carrito carrito, Long juegoId){
         JuegoDTO juego = webClient.get()
                     .uri("/api/v0/juegos/{id}", juegoId)
                     .retrieve()
@@ -29,10 +37,10 @@ public class CarritoService {
         carritoRepository.save(carrito);
     }
 
-    public Double calcularTotal(Carrito carrito) {
-        Double total = 0.0;
+    public BigDecimal calcularTotal(Carrito carrito) {
+        BigDecimal total = BigDecimal.ZERO;
         for (JuegoDTO juego : carrito.getJuegos()) {
-            total += juego.getPrecio();
+            total = total.add(juego.getPrecio());
         }
         return total;
     }
