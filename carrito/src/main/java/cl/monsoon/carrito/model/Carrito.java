@@ -1,9 +1,9 @@
-package cl.moonson.carrito.model;
+package cl.monsoon.carrito.model;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-import cl.moonson.carrito.dto.JuegoDTO;
+import cl.monsoon.carrito.dto.JuegoDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

@@ -1,4 +1,4 @@
-package cl.moonson.carrito;
+package cl.monsoon.carrito;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

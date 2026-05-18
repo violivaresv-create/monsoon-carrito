@@ -1,4 +1,4 @@
-package cl.moonson.carrito;
+package cl.monsoon.carrito;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

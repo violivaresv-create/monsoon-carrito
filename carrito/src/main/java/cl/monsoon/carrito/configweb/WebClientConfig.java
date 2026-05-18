@@ -1,4 +1,4 @@
-package cl.moonson.carrito.configweb;
+package cl.monsoon.carrito.configweb;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
