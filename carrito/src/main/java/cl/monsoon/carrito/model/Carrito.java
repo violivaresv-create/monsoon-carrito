@@ -1,14 +1,14 @@
 package cl.monsoon.carrito.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
-import cl.monsoon.carrito.dto.JuegoDTO;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,8 +23,8 @@ public class Carrito {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Transient
-    private List<JuegoDTO> juegos;
+    @ElementCollection
+    private List<Long> juegosIds = new ArrayList<>();
 
     private BigDecimal total;
 }

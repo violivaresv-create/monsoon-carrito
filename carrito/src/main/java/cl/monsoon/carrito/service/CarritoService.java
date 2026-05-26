@@ -33,13 +33,19 @@ public class CarritoService {
                     .retrieve()
                     .bodyToMono(JuegoDTO.class)
                     .block();
-        carrito.getJuegos().add(juego);
+        carrito.getJuegosIds().add(juegoId);
+         carrito.setTotal(carrito.getTotal().add(juego.getPrecio()));
         carritoRepository.save(carrito);
     }
 
     public BigDecimal calcularTotal(Carrito carrito) {
         BigDecimal total = BigDecimal.ZERO;
-        for (JuegoDTO juego : carrito.getJuegos()) {
+        for (Long juegoId : carrito.getJuegosIds()) {
+            JuegoDTO juego = webClient.get()
+                    .uri("/api/v0/juegos/{id}", juegoId)
+                    .retrieve()
+                    .bodyToMono(JuegoDTO.class)
+                    .block();
             total = total.add(juego.getPrecio());
         }
         return total;
