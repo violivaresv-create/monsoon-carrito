@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,10 +22,19 @@ public class Carrito {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(description = "ID del carrito de compras", 
+            example = "1",
+            requiredMode = Schema.RequiredMode.REQUIRED)
     private Long id;
 
     @ElementCollection
+    @Schema(description = "Lista de IDs de juegos en el carrito", 
+            example = "[1, 2, 3]",
+            requiredMode = Schema.RequiredMode.REQUIRED)
     private List<Long> juegosIds = new ArrayList<>();
-
+    
+    @Schema(description = "Total del carrito de compras", 
+            example = "59.99",
+            requiredMode = Schema.RequiredMode.REQUIRED)
     private BigDecimal total;
 }

@@ -21,13 +21,14 @@ public class CarritoService {
     @Autowired
     private WebClient webClient;
 
-    public Carrito crearCarrito() {
+    public boolean crearCarrito() {
         Carrito carrito = new Carrito();
         carrito.setTotal(BigDecimal.ZERO);
-    return carritoRepository.save(carrito);
+        carritoRepository.save(carrito);
+        return true;
     }
 
-    public void agregarJuegoAlCarrito(Carrito carrito, Long juegoId){
+    public boolean agregarJuegoAlCarrito(Carrito carrito, Long juegoId){
         JuegoDTO juego = webClient.get()
                     .uri("/api/v0/juegos/{id}", juegoId)
                     .retrieve()
@@ -36,6 +37,7 @@ public class CarritoService {
         carrito.getJuegosIds().add(juegoId);
          carrito.setTotal(carrito.getTotal().add(juego.getPrecio()));
         carritoRepository.save(carrito);
+        return true;
     }
 
     public BigDecimal calcularTotal(Carrito carrito) {
@@ -50,6 +52,26 @@ public class CarritoService {
         }
         return total;
     }
+    
+    public boolean eliminarJuegoDelCarrito(Carrito carrito, Long juegoId) {
+        if (carrito.getJuegosIds().remove(juegoId)) {
+            JuegoDTO juego = webClient.get()
+                    .uri("/api/v0/juegos/{id}", juegoId)
+                    .retrieve()
+                    .bodyToMono(JuegoDTO.class)
+                    .block();
+            carrito.setTotal(carrito.getTotal().subtract(juego.getPrecio()));
+            carritoRepository.save(carrito);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean eliminarCarrito(Long id) {
+        carritoRepository.deleteById(id);
+        return true;
+    }
+
 
     public Carrito obtenerCarritoPorId(Long id) {
         return carritoRepository.findById(id).orElseThrow(() -> new RuntimeException("Carrito no encontrado"));
