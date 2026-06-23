@@ -31,8 +31,8 @@ public class CarritoController {
     @Operation(summary = "Crea un nuevo carrito de compras" , description = "Crea un nuevo carrito de compras vacío y devuelve su información")
     @PostMapping
     public ResponseEntity<EntityModel<Carrito>> crearCarrito() {
-        boolean creado = carritoService.crearCarrito();
-        if (creado) return ResponseEntity.status(HttpStatus.CREATED).body(addLinks(null));
+        Carrito carrito= carritoService.crearCarrito();
+        if (carrito != null) return ResponseEntity.status(HttpStatus.CREATED).body(addLinks(carrito));
         else return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
@@ -40,8 +40,8 @@ public class CarritoController {
     @PostMapping("/{id}/agregar/{juegoId}")
     public ResponseEntity<EntityModel<Carrito>> agregarJuegoAlCarrito(@PathVariable Long id, @PathVariable Long juegoId) {
         Carrito carrito = carritoService.obtenerCarritoPorId(id);
-        boolean agregado = carritoService.agregarJuegoAlCarrito(carrito, juegoId);
-        if (agregado)return ResponseEntity.status(HttpStatus.OK).body(addLinks(carrito));
+        Carrito agregado = carritoService.agregarJuegoAlCarrito(carrito, juegoId);
+        if (agregado != null) return ResponseEntity.status(HttpStatus.OK).body(addLinks(agregado));
         else return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
     }
@@ -58,16 +58,16 @@ public class CarritoController {
     @DeleteMapping("/{id}/eliminarJuego/{juegoId}")
     public ResponseEntity<EntityModel<Carrito>> eliminarJuegoDelCarrito(@PathVariable Long id, @PathVariable Long juegoId) {
         Carrito carrito = carritoService.obtenerCarritoPorId(id);
-        boolean eliminado = carritoService.eliminarJuegoDelCarrito(carrito, juegoId);
-        if (eliminado) return ResponseEntity.status(HttpStatus.OK).body(addLinks(carrito));
+        Carrito eliminado = carritoService.eliminarJuegoDelCarrito(carrito, juegoId);
+        if (eliminado != null) return ResponseEntity.status(HttpStatus.OK).body(addLinks(eliminado));
         else return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
     @Operation(summary = "Elimina un carrito" , description = "Elimina un carrito de compras específico por su ID y devuelve una confirmación")
     @DeleteMapping("/eliminarCarrito/{id}")
     public ResponseEntity<EntityModel<Carrito>> eliminarCarrito(@PathVariable Long id) {
-        boolean eliminado = carritoService.eliminarCarrito(id);
-        if (eliminado) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        Carrito eliminado = carritoService.eliminarCarrito(id);
+        if (eliminado != null) return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         else return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 

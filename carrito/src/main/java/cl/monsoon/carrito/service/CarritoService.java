@@ -21,30 +21,30 @@ public class CarritoService {
     @Autowired
     private WebClient webClient;
 
-    public boolean crearCarrito() {
+    public Carrito crearCarrito() {
         Carrito carrito = new Carrito();
         carrito.setTotal(BigDecimal.ZERO);
         carritoRepository.save(carrito);
-        return true;
+        return carrito;
     }
 
-    public boolean agregarJuegoAlCarrito(Carrito carrito, Long juegoId){
+    public Carrito agregarJuegoAlCarrito(Carrito carrito, Long juegoId){
         JuegoDTO juego = webClient.get()
-                    .uri("/api/v0/juegos/{id}", juegoId)
+                    .uri("/api/v0/juegos/juego/{id}", juegoId)
                     .retrieve()
                     .bodyToMono(JuegoDTO.class)
                     .block();
         carrito.getJuegosIds().add(juegoId);
-         carrito.setTotal(carrito.getTotal().add(juego.getPrecio()));
+        carrito.setTotal(carrito.getTotal().add(juego.getPrecio()));
         carritoRepository.save(carrito);
-        return true;
+        return carrito;
     }
 
     public BigDecimal calcularTotal(Carrito carrito) {
         BigDecimal total = BigDecimal.ZERO;
         for (Long juegoId : carrito.getJuegosIds()) {
             JuegoDTO juego = webClient.get()
-                    .uri("/api/v0/juegos/{id}", juegoId)
+                    .uri("/api/v0/juegos/juego/{id}", juegoId)
                     .retrieve()
                     .bodyToMono(JuegoDTO.class)
                     .block();
@@ -53,27 +53,28 @@ public class CarritoService {
         return total;
     }
     
-    public boolean eliminarJuegoDelCarrito(Carrito carrito, Long juegoId) {
+    public Carrito eliminarJuegoDelCarrito(Carrito carrito, Long juegoId) {
         if (carrito.getJuegosIds().remove(juegoId)) {
             JuegoDTO juego = webClient.get()
-                    .uri("/api/v0/juegos/{id}", juegoId)
+                    .uri("/api/v0/juegos/juego/{id}", juegoId)
                     .retrieve()
                     .bodyToMono(JuegoDTO.class)
                     .block();
             carrito.setTotal(carrito.getTotal().subtract(juego.getPrecio()));
             carritoRepository.save(carrito);
-            return true;
+            return carrito;
         }
-        return false;
+        return null;
     }
 
-    public boolean eliminarCarrito(Long id) {
+    public Carrito eliminarCarrito(Long id) {
+        Carrito carrito = obtenerCarritoPorId(id);
         carritoRepository.deleteById(id);
-        return true;
+        return carrito;
     }
 
 
     public Carrito obtenerCarritoPorId(Long id) {
-        return carritoRepository.findById(id).orElseThrow(() -> new RuntimeException("Carrito no encontrado"));
+        return carritoRepository.findById(id).orElse(null);
     }
 }
