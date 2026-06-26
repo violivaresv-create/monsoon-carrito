@@ -64,7 +64,7 @@ public class CarritoControllerTest {
     @Test
     public void testEliminarJuegoDelCarrito() {
         when(carritoService.obtenerCarritoPorId(1L)).thenReturn(carrito);
-        when(carritoService.eliminarJuegoDelCarrito(carrito, 2L)).thenReturn(true);
+        when(carritoService.eliminarJuegoDelCarrito(carrito, 2L)).thenReturn(carrito);
 
         ResponseEntity<EntityModel<Carrito>> result = carritoController.eliminarJuegoDelCarrito(1L, 2L);
 
@@ -76,7 +76,7 @@ public class CarritoControllerTest {
     @Test
     public void testEliminarJuegoDelCarritoNoEncontrado() {
         when(carritoService.obtenerCarritoPorId(1L)).thenReturn(carrito);
-        when(carritoService.eliminarJuegoDelCarrito(carrito, 4L)).thenReturn(false);
+        when(carritoService.eliminarJuegoDelCarrito(carrito, 4L)).thenReturn(null);
 
         ResponseEntity<EntityModel<Carrito>> result = carritoController.eliminarJuegoDelCarrito(1L, 4L);
 
@@ -88,7 +88,7 @@ public class CarritoControllerTest {
 
     @Test
     public void testEliminarCarrito() {
-        when(carritoService.eliminarCarrito(1L)).thenReturn(true);
+        when(carritoService.eliminarCarrito(1L)).thenReturn(carrito);
 
         ResponseEntity<EntityModel<Carrito>> result = carritoController.eliminarCarrito(1L);
 
@@ -99,7 +99,7 @@ public class CarritoControllerTest {
 
     @Test
     public void testEliminarCarritoNoEncontrado() {
-        when(carritoService.eliminarCarrito(1L)).thenReturn(false);
+        when(carritoService.eliminarCarrito(1L)).thenReturn(null);
 
         ResponseEntity<EntityModel<Carrito>> result = carritoController.eliminarCarrito(1L);
 
